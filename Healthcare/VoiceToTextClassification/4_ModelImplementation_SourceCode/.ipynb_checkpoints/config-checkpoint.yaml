@@ -1,4 +1,0 @@
-text_file: DeepsphereProjects/Healthcare/MedicalTranscription/2_DataSet/hospital.txt
-model_file_path:
-lm_file_path:
-symptoms_path: DeepsphereProjects/Healthcare/MedicalTranscription/2_DataSet/symptoms.txt
