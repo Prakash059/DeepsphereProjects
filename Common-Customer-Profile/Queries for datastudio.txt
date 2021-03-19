@@ -47,3 +47,22 @@ group by created_time,platform_source
 -- case when twitter = 'yes' and image='yes' and youtube='yes'
 -- then 'yes' else null end as twitter_image_youtube,
 -- FROM `vast-verve-292018.ds_ai.ds_ai_customised_kmeans_op`
+
+
+
+--Percentage of users across all platforms
+with total as
+    ( select count(customer_id) as cnt from `vast-verve-292018.ds_ai.ds_ai_customised_kmeans_op` )
+select platform_source,
+    (count(customer_id) / total.cnt)*100 as percentage
+from `vast-verve-292018.ds_ai.ds_ai_customised_kmeans_op`,
+    total group by platform_source,cnt
+    
+    
+--Percentage of users across all platforms by date level
+with total as
+    ( select count(customer_id) as cnt from `vast-verve-292018.ds_ai.ds_ai_customised_kmeans_op` )
+select platform_source,created_time,
+    (count(customer_id) / total.cnt)*100 as percentage
+from `vast-verve-292018.ds_ai.ds_ai_customised_kmeans_op`,
+    total group by created_time,platform_source,cnt
