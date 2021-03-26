@@ -1,4 +1,0 @@
-ProblemStatement:
-
-Predicting the patients who are not using the medication prescribed by the doctors(Medication non-adherence),
-Also predicting the reason for the medication non-adherence such as Fear about side effects, Depression, Misunderstanding, Cost, etc.,
