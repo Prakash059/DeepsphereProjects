@@ -1,5 +1,5 @@
 
-
+/* buttons */
 .stButton>button {
    background-color: #4CAF50;
   border: none;
@@ -14,50 +14,39 @@
     width: 250px;
     height: 50px;
 }
-
-.css-1aumxhk{
+/* title */
+.css-h2raq8>h2{
+    width:110%;
+    text-align: center;
+}
+/* sidebar width reduce */
+.css-1l02zno{
     color: black;
-        background-color: black;
+    background-color: #2e7bcf;
+    width: 15rem;
 }
-
-.reportview-container .sidebar .block-container{
-    color: black;
-        background-color: black;
-}
-
-
-.sidebar .sidebar-content {
-    background: black;
-    color: white;
-}
-
-
+/* Main page */
 .reportview-container {
-        background: #D3D3D3
+        background: solid white;
     }
-.sidebar {
-    background: black
-}
 
 img {
   position: absolute;
-  left: -170px;
+  left: -200px;
   top: -100px;
   width: 200px;
   height: 150px;
 }
 
+/* .css-145kmo2{
+    color: white;
+} */
 
+/* .css-1d0tddh{
+    color: white;
+} */
 
-
-.wrapper {
-background-color: black;
-}
-
-.widget-area .widget, .widget-area .widget a {
-color: black;
-}
-
-.widget-area .widget-title span {
-background: black;
-}
+/* .css-1lcbmhc{
+    width: 100px;
+    height: 100px;
+} */

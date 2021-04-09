@@ -4,7 +4,7 @@ import traceback
 from PIL import Image
 # Utils Pkgs
 import codecs
-# from true_false import file_selector_tf,tokenize_sentences_tf,pos_tree_from_sentence,get_np_vp,alternate_sentences
+from true_false import file_selector_tf,tokenize_sentences_tf,pos_tree_from_sentence,get_np_vp,alternate_sentences
 import streamlit.components.v1 as stc
 
 def fill_blank(sentence,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj):
@@ -105,31 +105,19 @@ def local_css(file_name):
 if __name__=='__main__':
     try:
         local_css("style.css")
-        
         image = Image.open('DeepSphere_Logo_Final.png')
         st.image(image)
-        st.title('NLP Simplifies Questions and Assignments Construction - Powered by GCP')
+        st.markdown('<h2>NLP Simplifies Questions and Assignments Construction <br><font style="color: #5500FF;">Powered by Google Cloud & Colab</font></h2>',unsafe_allow_html=True)
         activities= ['Fill in the Blank','True or False']
+        choice = st.sidebar.selectbox('Select Your Question Type',activities)
         sentences= []
         noun_verbs_adj=[]
         keyword_sentence_mapping_noun_verbs_adj = {}
-        choice = st.sidebar.selectbox('Select Your Question Type',activities)
-        st.markdown("""
-    <style>
-    .css-1aumxhk {
-        
-        color: black;
-        background-color: #4CAF50;
-    }
-    </style>
-""", unsafe_allow_html=True)
-        st.sidebar.header("I am up")
         if choice=='Fill in the Blank':
             st.subheader('Fill in the Blank')
-            st.markdown('<style>.sidebar .sidebar-content {background-image: linear-gradient(#2e7bcf,#2e7bcf);color: white;</style>',unsafe_allow_html=True)
             fill_blank(sentences,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj)
-#         if choice=='True or False':
-#             st.subheader('True or False')
-#             true_false()
+        if choice=='True or False':
+            st.subheader('True or False')
+            true_false()
     except:
         traceback.print_exc()
