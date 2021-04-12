@@ -10,7 +10,7 @@ from true_false import file_selector_tf,tokenize_sentences_tf,pos_tree_from_sent
 from fill_blank import file_selector,tokenize_sentences,get_noun_adj_verb,\
     get_sentences_for_keyword,get_fill_in_the_blanks
 from matchthefollowing import tokenize_sentences, get_keywords, \
-    get_sentences_for_keyword,question
+    get_sentences_for_keyword, question, file_selector
 
 def match_the_foll():
     text = file_selector()
