@@ -52,7 +52,7 @@ def match_the_foll():
                 keyword_sentence_mapping = get_sentences_for_keyword(keywords, sentences)
                 mtf_table = question(keyword_sentence_mapping)
                 # st.write(mtf_table)
-                st.dataframe(mtf_table)
+                st.table(mtf_table)
         else:
             st.error("Please select input file!")
 
