@@ -117,12 +117,13 @@ def printmd(string):
 @st.cache(show_spinner=False)
 def question(keyword_sentence_mapping):
     # tab = PrettyTable()
-    cols = {}
     answers, final_sentences = sentence_answers(keyword_sentence_mapping)
     random.shuffle(answers)
     random.shuffle(final_sentences)
-    for word,context in zip(answers,final_sentences):
-        cols[word] = context
+    cols = {
+        "A": answers,
+        "B": final_sentences
+    }
     # tab.field_names=['A', 'B']
     # tab.align["A"] = "l"
     # tab.align["B"] = "l"
