@@ -116,17 +116,21 @@ def printmd(string):
 
 @st.cache(show_spinner=False)
 def question(keyword_sentence_mapping):
-    tab = PrettyTable()
+    # tab = PrettyTable()
+    cols = {}
     answers, final_sentences = sentence_answers(keyword_sentence_mapping)
     random.shuffle(answers)
     random.shuffle(final_sentences)
-    tab.field_names=['A', 'B']
-    tab.align["A"] = "l"
-    tab.align["B"] = "l"
-
-    printmd('**Match column A with column B**')
-
     for word,context in zip(answers,final_sentences):
-        tab.add_row([word,context.replace("\n"," ")])
-        tab.add_row(['',''])
-    return tab
+        cols[word] = context
+    # tab.field_names=['A', 'B']
+    # tab.align["A"] = "l"
+    # tab.align["B"] = "l"
+
+    # printmd('**Match column A with column B**')
+
+    # for word,context in zip(answers,final_sentences):
+    #     tab.add_row([word,context.replace("\n"," ")])
+    #     tab.add_row(['',''])
+    # return tab
+    return cols
