@@ -5,6 +5,7 @@ import re
 import nltk
 import string
 import itertools
+import streamlit as st
 nltk.download('stopwords')
 nltk.download('wordnet')
 nltk.download('punkt')
@@ -20,11 +21,20 @@ import random
 from prettytable import PrettyTable
 from IPython.display import Markdown, display
 
+def file_selector():
+    file = st.file_uploader('Upload the text file',type=['txt'])
+    if file is not None:
+        text = file.read().decode("utf-8")
+        st.write('Selected file content is `%s`' % text)
+        return text
+
+@st.cache(show_spinner=False)
 def tokenize_sentences(text):
     sentences = sent_tokenize(text)
     sentences = [sentence.strip() for sentence in sentences if len(sentence) > 20]
     return sentences
 
+@st.cache(show_spinner=False)
 def get_keywords(text):
     out=[]
     try:
@@ -52,6 +62,7 @@ def get_keywords(text):
     return out
 
 #Extract sentences having the keywords that is extracted before.
+@st.cache(show_spinner=False)
 def get_sentences_for_keyword(keywords, sentences):
     keyword_processor = KeywordProcessor()
     keyword_sentences = {}
@@ -103,6 +114,7 @@ def sentence_answers(keyword_sentence_mapping):
 def printmd(string):
     display(Markdown(string))
 
+@st.cache(show_spinner=False)
 def question(keyword_sentence_mapping):
     tab = PrettyTable()
     answers, final_sentences = sentence_answers(keyword_sentence_mapping)
