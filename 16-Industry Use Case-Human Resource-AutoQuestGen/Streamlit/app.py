@@ -1,11 +1,63 @@
-from fill_blank import file_selector,tokenize_sentences,get_noun_adj_verb,get_sentences_for_keyword,get_fill_in_the_blanks
 import streamlit as st
 import traceback
 from PIL import Image
 # Utils Pkgs
 import codecs
-from true_false import file_selector_tf,tokenize_sentences_tf,pos_tree_from_sentence,get_np_vp,alternate_sentences
 import streamlit.components.v1 as stc
+import textwrap
+from true_false import file_selector_tf,tokenize_sentences_tf,pos_tree_from_sentence,\
+    get_np_vp,alternate_sentences
+from fill_blank import file_selector,tokenize_sentences,get_noun_adj_verb,\
+    get_sentences_for_keyword,get_fill_in_the_blanks
+from matchthefollowing import tokenize_sentences, get_keywords, \
+    get_sentences_for_keyword, question, file_selector
+
+def match_the_foll():
+    text = file_selector()
+    st.write('Step 1')
+    if st.button('Tokenize sentences'):
+        if text is not None:
+            with st.spinner("Processing input to tokenize sentence"):
+                sentences = tokenize_sentences(text)
+                st.write(sentences)
+            st.success('Tokenizing completed ')
+        else:
+            st.error("Please select input file!")
+    st.write('Step 2')
+    if st.button('Extract Keywords'):
+        if text is not None:
+            with st.spinner("Processing input to extract keywords"):
+                keywords = get_keywords(text)[:6]
+                st.write(keywords)
+            st.success('Keywords Extracted')
+        else:
+            st.error("Please select input file!")
+    st.write('Step 3')
+    if st.button('Sentence Keyword Match'):
+        if text is not None:
+            with st.spinner("Processing input to match keywords with sentences"):
+                sentences = tokenize_sentences(text)
+                keywords = get_keywords(text)[:6]
+                keyword_sentence_mapping = get_sentences_for_keyword(keywords, sentences)
+                st.write(keyword_sentence_mapping)
+            st.success('Sentence Keyword Match Completed')
+        else:
+            st.error("Please select input file!")
+    st.write('Step 4')
+    if st.button('Match the Following Questions'):
+        if text is not None:
+            with st.spinner("Processing input to generate questions"):
+                sentences = tokenize_sentences(text)
+                keywords = get_keywords(text)[:6]
+                keyword_sentence_mapping = get_sentences_for_keyword(keywords, sentences)
+                mtf_table = question(keyword_sentence_mapping)
+                st.table(mtf_table)
+        else:
+            st.error("Please select input file!")
+
+def mcq():
+    text = file_selector()
+    st.write("MCQ question generation pending")
 
 def fill_blank(sentence,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj):
     text = file_selector()
@@ -79,7 +131,6 @@ def true_false():
                 sentences = tokenize_sentences_tf(text)
                 pos = pos_tree_from_sentence(sentences)
                 split_sentence = get_np_vp(pos,sentences)
-                print('split_sentence in app.py- ',split_sentence)
                 st.write(split_sentence)
             st.success('Sentence splitted')
         else:
@@ -100,16 +151,21 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
         
-
-        
 if __name__=='__main__':
     try:
         local_css("style.css")
         image = Image.open('DeepSphere_Logo_Final.png')
         st.image(image)
         st.markdown('<h2>NLP Simplifies Questions and Assignments Construction <br><font style="color: #5500FF;">Powered by Google Cloud & Colab</font></h2>',unsafe_allow_html=True)
-        activities= ['Fill in the Blank','True or False']
-        choice = st.sidebar.selectbox('Select Your Question Type',activities)
+        st.markdown('<hr style="border-top: 6px solid #8c8b8b; width: 150%;margin-left:-180px">',unsafe_allow_html=True)
+        activities= ['Select Your Question Type','Fill in the Blank','True or False', 'Match the Following', 'MCQ']
+        model_choices = ['Model Implemented','BERT']
+        libraries = ['Library Used','spacy','nltk','tensorflow','allennlp','flashtext','streamlit','pke']
+        gcp = ['GCP Services Used','VM Instance']
+        choice = st.sidebar.selectbox('',activities)
+        model_choice = st.sidebar.selectbox('',model_choices)
+        libraries_choice = st.sidebar.selectbox('',libraries)
+        gcp_services = st.sidebar.selectbox('',gcp)
         sentences= []
         noun_verbs_adj=[]
         keyword_sentence_mapping_noun_verbs_adj = {}
@@ -119,5 +175,11 @@ if __name__=='__main__':
         if choice=='True or False':
             st.subheader('True or False')
             true_false()
+        if choice == 'Match the Following':
+            st.subheader('Match the Following')
+            match_the_foll()
+        if choice == 'MCQ':
+            st.subheader('Multiple Choice Questions')
+            mcq()
     except:
         traceback.print_exc()
