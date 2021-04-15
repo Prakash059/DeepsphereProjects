@@ -176,21 +176,22 @@ def all_initialisations():
     st.markdown('<h2>NLP Simplifies Questions and Assignments Construction <br><font style="color: #5500FF;">Powered by Google Cloud & Colab</font></h2>',unsafe_allow_html=True)
     activities= ['Fill in the Blank','True or False', 'Match the Following', 'MCQ']
     choice = st.sidebar.selectbox('Select Your Question Type',activities)
+    return choice
 
 if __name__=='__main__':
     try:
-        all_initialisations()
+        choice = all_initialisations() 
         sentences= []
         noun_verbs_adj=[]
         keyword_sentence_mapping_noun_verbs_adj = {}
         if choice=='Fill in the Blank':
-            st.subheader('Fill in the Blank')
+            st.subheader(choice)
             fill_blank(sentences,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj)
         if choice=='True or False':
-            st.subheader('True or False')
+            st.subheader(choice)
             true_false()
         if choice == 'Match the Following':
-            st.subheader('Match the Following')
+            st.subheader(choice)
             match_the_foll()
         if choice == 'MCQ':
             st.subheader('Multiple Choice Questions')
