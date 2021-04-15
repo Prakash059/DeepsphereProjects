@@ -5,15 +5,24 @@ from PIL import Image
 import codecs
 import streamlit.components.v1 as stc
 import textwrap
+from datetime import datetime
 from true_false import file_selector_tf,tokenize_sentences_tf,pos_tree_from_sentence,\
     get_np_vp,alternate_sentences
 from fill_blank import file_selector,tokenize_sentences,get_noun_adj_verb,\
     get_sentences_for_keyword,get_fill_in_the_blanks
 from matchthefollowing import tokenize_sentences, get_keywords, \
-    get_sentences_for_keyword, question, file_selector
+    get_sentences_for_keyword,question,file_selector
+
+def output_file(out_var,quest_type):
+    dt = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    with open("output.txt","a") as f:
+        f.write(f"{dt} {quest_type} OUTPUT: {out_var}")
+        f.write("\n\n")
+
 
 def match_the_foll():
     text = file_selector()
+    quest = "Match the Following"
     st.write('Step 1')
     if st.button('Tokenize sentences'):
         if text is not None:
@@ -53,15 +62,20 @@ def match_the_foll():
                 mtf_table = question(keyword_sentence_mapping)
                 # st.write(mtf_table)
                 st.table(mtf_table)
+                output_file(mtf_table, quest)
         else:
             st.error("Please select input file!")
 
 def mcq():
     text = file_selector()
+    quest = "MCQ"
     st.write("MCQ question generation pending")
+    mcq = "Output Pending"
+    output_file(mcq, quest)
 
 def fill_blank(sentence,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj):
     text = file_selector()
+    quest = "Fill in The Blanks"
     st.write('Step 1')
     if st.button('Tokenize sentences'):
         if text is not None:
@@ -100,12 +114,14 @@ def fill_blank(sentence,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj):
                 keyword_sentence_mapping_noun_verbs_adj = get_sentences_for_keyword(noun_verbs_adj, sentences)
                 fill_in_the_blanks = get_fill_in_the_blanks(keyword_sentence_mapping_noun_verbs_adj)
                 st.write(fill_in_the_blanks)
+                output_file(fill_in_the_blanks, quest)
         else:
             st.error("Please select input file!")
 
                 
 def true_false():
     text = file_selector_tf()
+    quest = "True or False"
     st.write('Step 1')
     if st.button('Tokenize sentences'):
         if text is not None:
@@ -145,22 +161,25 @@ def true_false():
                 pos = pos_tree_from_sentence(sentences)
                 alt_sentence = alternate_sentences(pos,sentences)
                 st.write(alt_sentence)
+                output_file(alt_sentence,quest)
         else:
             st.error("Please select input file!")
     
 def local_css(file_name):
-    
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
         
+def all_initialisations():
+    local_css("style.css")
+    image = Image.open('DeepSphere_Logo_Final.png')
+    st.image(image)
+    st.markdown('<h2>NLP Simplifies Questions and Assignments Construction <br><font style="color: #5500FF;">Powered by Google Cloud & Colab</font></h2>',unsafe_allow_html=True)
+    activities= ['Fill in the Blank','True or False', 'Match the Following', 'MCQ']
+    choice = st.sidebar.selectbox('Select Your Question Type',activities)
+
 if __name__=='__main__':
     try:
-        local_css("style.css")
-        image = Image.open('DeepSphere_Logo_Final.png')
-        st.image(image)
-        st.markdown('<h2>NLP Simplifies Questions and Assignments Construction <br><font style="color: #5500FF;">Powered by Google Cloud & Colab</font></h2>',unsafe_allow_html=True)
-        activities= ['Fill in the Blank','True or False', 'Match the Following', 'MCQ']
-        choice = st.sidebar.selectbox('Select Your Question Type',activities)
+        all_initialisations()
         sentences= []
         noun_verbs_adj=[]
         keyword_sentence_mapping_noun_verbs_adj = {}
