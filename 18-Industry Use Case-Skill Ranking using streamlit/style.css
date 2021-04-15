@@ -1,0 +1,25 @@
+
+img{
+	position: absolute;
+	left: -120px;
+	top: -100px;
+	width: 150px;
+	height: 100px;
+}
+
+html_temp{
+	position: absolute;
+	left: 200px;
+	top: -80px;
+}
+
+
+.markdown{
+	top: 100px;
+}
+
+.css-h2raq8>h2{
+	top: -100px;
+    width:110%;
+    text-align: center;
+}
