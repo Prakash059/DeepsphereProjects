@@ -7,22 +7,45 @@ import streamlit.components.v1 as stc
 import textwrap
 import base64
 from datetime import datetime
-# from true_false import file_selector_tf,tokenize_sentences_tf,pos_tree_from_sentence,\
-#     get_np_vp,alternate_sentences
-from fill_blank import file_selector,tokenize_sentences,get_noun_adj_verb,\
-    get_sentences_for_keyword,get_fill_in_the_blanks
+from true_false import tokenize_sentences_tf,pos_tree_from_sentence,\
+    get_np_vp,alternate_sentences,#file_selector_tf
+from fill_blank import tokenize_sentences,get_noun_adj_verb,\
+    get_sentences_for_keyword,get_fill_in_the_blanks#,file_selector
 from matchthefollowing import tokenize_sentences, get_keywords, \
-    get_sentences_for_keyword,question,file_selector
+    get_sentences_for_keyword,question#,file_selector
 
-def output_file(out_var,quest_type):
-    dt = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    with open("output.txt","a") as f:
-        f.write(f"{dt} {quest_type} OUTPUT: {out_var}")
-        f.write("\n\n")
+def main_file_selector():
+    file = st.file_uploader('Upload the text file',type=['txt'])
+    if file is not None:
+        text = file.read().decode("utf-8")
+        st.write('Selected file content is `%s`' % text)
+        return text
 
+def dtime():
+  return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-def match_the_foll():
-    text = file_selector()
+def output_file(out, quest_type):
+  with open("output.txt","a") as f:
+    if quest_type == "Input Text":
+      f.write("="*100+"\n")
+    else:
+      f.write("-"*100+"\n")
+    dt = dtime()
+    f.write(f"{dt} {quest_type}:\n")
+    f.write("-"*100+"\n\n")
+    if quest_type == "Input Text" or quest_type == "Match the Following":
+      f.write(out+"\n")
+    elif quest_type == "Fill in The Blanks":
+      for i,sent in enumerate(out["sentences"]):
+        f.write(f"{str(i+1)}. {sent}\n")
+      f.write("\n"+str(out["keys"])+"\n")
+    else:
+      for i,que in enumerate(out):
+        f.write(f"{str(i+1)}. {que}\n")
+    f.write("\n")
+
+def match_the_foll(text):
+    # text = file_selector()
     quest = "Match the Following"
     st.write('Step 1')
     if st.button('Tokenize sentences'):
@@ -60,22 +83,22 @@ def match_the_foll():
                 sentences = tokenize_sentences(text)
                 keywords = get_keywords(text)[:6]
                 keyword_sentence_mapping = get_sentences_for_keyword(keywords, sentences)
-                mtf_table = question(keyword_sentence_mapping)
+                mtf_table, ptable = question(keyword_sentence_mapping)
                 # st.write(mtf_table)
                 st.table(mtf_table)
-                output_file(mtf_table, quest)
+                output_file(ptable, quest)
         else:
             st.error("Please select input file!")
 
 def mcq():
-    text = file_selector()
+    # text = file_selector()
     quest = "MCQ"
     st.write("MCQ question generation pending")
     mcq = "Output Pending"
     output_file(mcq, quest)
 
-def fill_blank(sentence,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj):
-    text = file_selector()
+def fill_blank(text, sentence,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj):
+    # text = file_selector()
     quest = "Fill in The Blanks"
     st.write('Step 1')
     if st.button('Tokenize sentences'):
@@ -120,8 +143,8 @@ def fill_blank(sentence,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj):
             st.error("Please select input file!")
 
                 
-def true_false():
-    text = file_selector_tf()
+def true_false(text):
+    # text = file_selector_tf()
     quest = "True or False"
     st.write('Step 1')
     if st.button('Tokenize sentences'):
@@ -177,7 +200,7 @@ def all_initialisations():
     
     st.markdown('<h2>NLP Simplifies Questions and Assignments Construction <br><font style="color: #5500FF;">Powered by Google Cloud & Colab</font></h2>',unsafe_allow_html=True)
     st.markdown('<hr style="border-top: 6px solid #8c8b8b; width: 150%;margin-left:-180px">',unsafe_allow_html=True)
-    activities= ['Select Your Question Type','Fill in the Blank','True or False', 'Match the Following', 'MCQ']
+    activities= ['Select Your Question Type','Fill in the Blanks','True or False', 'Match the Following', 'MCQ']
     model_choices = ['Model Implemented','BERT']
     libraries = ['Library Used','spacy','nltk','tensorflow','allennlp','flashtext','streamlit','pke']
     gcp = ['GCP Services Used','VM Instance']
@@ -193,15 +216,18 @@ if __name__=='__main__':
         sentences= []
         noun_verbs_adj=[]
         keyword_sentence_mapping_noun_verbs_adj = {}
-        if choice=='Fill in the Blank':
+        main_text = main_file_selector()
+        if main_text:
+            output_file(main_text,"Input Text")
+        if choice=='Fill in the Blanks':
             st.subheader(choice)
-            fill_blank(sentences,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj)
+            fill_blank(main_text, sentences,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj)
         if choice=='True or False':
             st.subheader(choice)
-            true_false()
+            true_false(main_text)
         if choice == 'Match the Following':
             st.subheader(choice)
-            match_the_foll()
+            match_the_foll(main_text)
         if choice == 'MCQ':
             st.subheader('Multiple Choice Questions')
             mcq()
