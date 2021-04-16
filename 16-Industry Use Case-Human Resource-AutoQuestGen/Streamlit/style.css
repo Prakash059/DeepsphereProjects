@@ -9,10 +9,10 @@
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
+  margin: 2px 2px;
   cursor: pointer;
     width: 300px;
-    height: 50px;
+    height: 58px;
 }
 
 .css-hi6a2p{
@@ -63,4 +63,16 @@ img {
   width: 200px;
   height: 150px;
     padding-top: 10px;
+}
+.st-dt {
+    background-color: grey;
+}
+.st-ds {
+    color: white;
+}
+
+.css-7po9eu {
+    flex: 1 1 25%;
+    width: 2px;
+    padding-left: 0.3rem;
 }

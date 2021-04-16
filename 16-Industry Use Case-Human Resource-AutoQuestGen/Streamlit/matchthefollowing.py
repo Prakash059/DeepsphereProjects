@@ -115,6 +115,7 @@ def printmd(string):
     display(Markdown(string))
 
 @st.cache(show_spinner=False)
+@st.cache(allow_output_mutation=True)
 def question(keyword_sentence_mapping):
     tab = PrettyTable()
     answers, final_sentences = sentence_answers(keyword_sentence_mapping)
