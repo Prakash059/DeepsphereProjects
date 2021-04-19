@@ -21,13 +21,6 @@ import random
 from prettytable import PrettyTable
 from IPython.display import Markdown, display
 
-def file_selector():
-    file = st.file_uploader('Upload the text file',type=['txt'])
-    if file is not None:
-        text = file.read().decode("utf-8")
-        st.write('Selected file content is `%s`' % text)
-        return text
-
 @st.cache(show_spinner=False)
 def tokenize_sentences(text):
     sentences = sent_tokenize(text)
@@ -94,22 +87,6 @@ def sentence_answers(keyword_sentence_mapping):
             else:
                 final_sentences.append(match)
     return final_sentences, answers
-# pprint(final_sentences)
-# pprint(answers)
-
-# Solution
-# tab = PrettyTable()
-# tab.field_names=['A', 'B']
-# tab.align["A"] = "l"
-# tab.align["B"] = "l"
-
-# def printmd(string):
-#     display(Markdown(string))
-# printmd('**Match column A with column B -SOLUTION**')
-
-# for word,context in zip(answers,final_sentences):
-#   tab.add_row([word,context.replace("\n"," ")])
-#   tab.add_row(['',''])
 
 def printmd(string):
     display(Markdown(string))
@@ -117,7 +94,7 @@ def printmd(string):
 @st.cache(show_spinner=False)
 @st.cache(allow_output_mutation=True)
 def question(keyword_sentence_mapping):
-    tab = PrettyTable()
+    # tab = PrettyTable()
     answers, final_sentences = sentence_answers(keyword_sentence_mapping)
     random.shuffle(answers)
     random.shuffle(final_sentences)
@@ -125,13 +102,13 @@ def question(keyword_sentence_mapping):
         "A": answers,
         "B": final_sentences
     }
-    tab.field_names=['A', 'B']
-    tab.align["A"] = "l"
-    tab.align["B"] = "l"
+    # tab.field_names=['A', 'B']
+    # tab.align["A"] = "l"
+    # tab.align["B"] = "l"
 
-    # printmd('**Match column A with column B**')
+    # # printmd('**Match column A with column B**')
 
-    for word,context in zip(answers,final_sentences):
-        tab.add_row([word,context.replace("\n"," ")])
-        tab.add_row(['',''])
-    return cols, tab
+    # for word,context in zip(answers,final_sentences):
+    #     tab.add_row([word,context.replace("\n"," ")])
+    #     tab.add_row(['',''])
+    return cols
