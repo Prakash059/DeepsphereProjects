@@ -25,13 +25,6 @@ nlp = spacy.load("en_core_web_sm")
 
 def dtime():
       return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-def file_selector():
-    file = st.file_uploader('Select your input data(Test data)',type=['txt'],key='fill_blank')
-    if file is not None:
-        text = file.read().decode("utf-8")
-        st.write('Selected file content is `%s`' % text)
-        return text
-
 
 # Tokenizing sentence using nltk sent_tokenize
 @st.cache(show_spinner=False)
