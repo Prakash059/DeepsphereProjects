@@ -13,14 +13,6 @@ from nltk import tokenize
 
 predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/elmo-constituency-parser-2018.03.14.tar.gz")
 
-
-def file_selector_tf():
-    file = st.file_uploader('Select your input data(Test data)',type=['txt'],key='true_false')
-    if file is not None:
-        text = file.read().decode("utf-8")
-        st.write('Selected file content is `%s`' % text)
-        return text
-
 # Tokenizing sentence using nltk sent_tokenize
 @st.cache
 def tokenize_sentences_tf(text):
