@@ -6,13 +6,15 @@ from PIL import Image
 import codecs
 import streamlit.components.v1 as stc
 import textwrap
+import pandas as pd
 import base64
 from datetime import datetime
-from true_false import tokenize_sentences_tf,pos_tree_from_sentence,get_np_vp,alternate_sentences#,file_selector_tf
-from fill_blank import tokenize_sentences,get_noun_adj_verb,get_sentences_for_keyword,get_fill_in_the_blanks,file_selector,download_link
-from matchthefollowing import tokenize_sentences, get_keywords,get_sentences_for_keyword,question#,file_selector
+from true_false import tokenize_sentences_tf, pos_tree_from_sentence,get_np_vp,alternate_sentences
+from fill_blank import tokenize_sentences,get_noun_adj_verb,get_sentences_for_keyword,get_fill_in_the_blanks,download_link
+from matchthefollowing import tokenize_sentences, get_keywords,get_sentences_for_keyword,question
+from mcq import tokenize_sentences,get_keywords, get_sentences_for_keyword, kw_distractors, getMCQ
 
-def main_file_selector():
+def file_selector():
     file = st.file_uploader('Upload the text file',type=['txt'])
     if file is not None:
         text = file.read().decode("utf-8")
@@ -32,12 +34,24 @@ def output_file(out, quest_type):
         f.write(f"{dt} {quest_type}:\n")
         f.write("-"*100+"\n\n")
         if quest_type == "Input Text" or quest_type == "Match the Following":
-              f.write(f"{out}\n")
+            df = pd.DataFrame(out)
+            df.to_string(f,index = False, justify="justify-all")
+            f.write("\n")
         elif quest_type == "Fill in The Blanks":
-            
             for i,sent in enumerate(out["sentences"]):
                 f.write(f"{str(i+1)}. {sent}\n")
             f.write("\n"+str(out["keys"])+"\n")
+        elif quest_type == "MCQ":
+            count = 1
+            for quest,options in out.items():
+                asci = 97
+                f.write(f"{str(count)}. {quest}")
+                if options:
+                    for opt in options:
+                        f.write(chr(asci)+")",opt.capitalize(),sep = " ")
+                        asci += 1
+                    f.write("\n")
+                count += 1
         else:
             for i,que in enumerate(out):
                 f.write(f"{str(i+1)}. {que}\n")
@@ -90,11 +104,11 @@ def match_the_foll():
                 sentences = tokenize_sentences(text)
                 keywords = get_keywords(text)[:6]
                 keyword_sentence_mapping = get_sentences_for_keyword(keywords, sentences)
-                mtf_table, ptable = question(keyword_sentence_mapping)
+                mtf_table= question(keyword_sentence_mapping)
                 # st.write(mtf_table)
                 st.table(mtf_table)
                 output_file(text,"Input Text")
-                output_file(ptable, quest)
+                output_file(mtf_table, quest)
         else:
             st.error("Please select input file!")
     vm_col1,vm_col2,vm_col3 = st.beta_columns((1,1,2))
@@ -102,7 +116,6 @@ def match_the_foll():
     vm_col2.success("Step 5")
     if vm_col3.button('View Model Outcome'):
         if text is not None:
-#             pass
             sentences = tokenize_sentences(text)
             keywords = get_keywords(text)[:6]
             keyword_sentence_mapping = get_sentences_for_keyword(keywords, sentences)
@@ -114,9 +127,70 @@ def match_the_foll():
 def mcq():
     text = file_selector()
     quest = "MCQ"
-    st.write("MCQ question generation pending")
-    mcq = "Output Pending"
-    output_file(mcq, quest)
+    ts_col1,ts_col2,ts_col3 = st.beta_columns((1,1,2))
+    ts_col1.success("Run Model")
+    ts_col2.success("Step 1")
+    if ts_col3.button('Tokenize sentences'):
+        if text is not None:
+            with st.spinner("Processing input to tokenize sentence"):
+                sentences = tokenize_sentences(text)
+                st.write(sentences)
+            st.success('Tokenizing completed ')
+        else:
+            st.error("Please select input file!")
+    ek_col1,ek_col2,ek_col3 = st.beta_columns((1,1,2))
+    ek_col1.success("Run Model")
+    ek_col2.success("Step 2")
+    if ek_col3.button('Extract Keywords'):
+        if text is not None:
+            with st.spinner("Processing input to extract keywords"):
+                keywords = get_keywords(text)[:6]
+                st.write(keywords)
+            st.success('Keywords Extracted')
+        else:
+            st.error("Please select input file!")
+    km_col1,km_col2,km_col3 = st.beta_columns((1,1,2))
+    km_col1.success("Run Model")
+    km_col2.success("Step 3")
+    if km_col3.button('Sentence Keyword Match'):
+        if text is not None:
+            with st.spinner("Processing input to match keywords with sentences"):
+                sentences = tokenize_sentences(text)
+                keywords = get_keywords(text)[:6]
+                keyword_sentence_mapping = get_sentences_for_keyword(keywords, sentences)
+                st.write(keyword_sentence_mapping)
+            st.success('Sentence Keyword Match Completed')
+        else:
+            st.error("Please select input file!")
+    fq_col1,fq_col2,fq_col3 = st.beta_columns((1,1,2))
+    fq_col1.success("Run Model")
+    fq_col2.success("Step 4")
+    if fq_col3.button('Match the Following Questions'):
+        if text is not None:
+            with st.spinner("Processing input to generate questions"):
+                sentences = tokenize_sentences(text)
+                keywords = get_keywords(text)[:6]
+                keyword_sentence_mapping = get_sentences_for_keyword(keywords, sentences)
+                choices = kw_distractors(keywords)
+                mcq_ques = getMCQ(keyword_sentence_mapping,choices)
+                st.write(mcq_ques)
+                output_file(text,"Input Text")
+                output_file(mcq_ques, quest)
+        else:
+            st.error("Please select input file!")
+    vm_col1,vm_col2,vm_col3 = st.beta_columns((1,1,2))
+    vm_col1.success("Validate Model")
+    vm_col2.success("Step 5")
+    if vm_col3.button('View Model Outcome'):
+        if text is not None:
+            sentences = tokenize_sentences(text)
+            keywords = get_keywords(text)[:6]
+            keyword_sentence_mapping = get_sentences_for_keyword(keywords, sentences)
+            mtf_table = question(keyword_sentence_mapping)
+            st.markdown(download_link(mtf_table, 'model_output.txt', 'Click here to download your output!',quest),unsafe_allow_html=True)
+        else:
+            st.error("Please select input file!")
+
 
 def fill_blank(sentence,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj):
     text = file_selector()
@@ -176,7 +250,6 @@ def fill_blank(sentence,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj):
     vm_col2.success("Step 5")
     if vm_col3.button('View Model Outcome'):
         if text is not None:
-#             pass
             sentences = tokenize_sentences(text)
             noun_verbs_adj = get_noun_adj_verb(text)
             keyword_sentence_mapping_noun_verbs_adj = get_sentences_for_keyword(noun_verbs_adj, sentences)
@@ -245,7 +318,6 @@ def true_false():
     vm_col2.success("Step 5")
     if vm_col3.button('View Model Outcome'):
         if text is not None:
-#             pass
             sentences = tokenize_sentences_tf(text)
             pos = pos_tree_from_sentence(sentences)
             alt_sentence = alternate_sentences(pos,sentences)
@@ -280,9 +352,6 @@ if __name__=='__main__':
         sentences= []
         noun_verbs_adj=[]
         keyword_sentence_mapping_noun_verbs_adj = {}
-#         main_text = main_file_selector()
-#         if main_text:
-#             output_file(main_text,"Input Text")
         if choice=='Fill in the Blanks':
             st.subheader(choice)
             fill_blank( sentences,noun_verbs_adj,keyword_sentence_mapping_noun_verbs_adj)
