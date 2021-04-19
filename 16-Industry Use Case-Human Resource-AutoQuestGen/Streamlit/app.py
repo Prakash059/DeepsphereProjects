@@ -33,7 +33,9 @@ def output_file(out, quest_type):
         dt = dtime()
         f.write(f"{dt} {quest_type}:\n")
         f.write("-"*100+"\n\n")
-        if quest_type == "Input Text" or quest_type == "Match the Following":
+        if quest_type == "Input Text":
+            f.write(out+"\n")
+        elif quest_type == "Match the Following":
             df = pd.DataFrame(out)
             df.to_string(f,index = False, justify="justify-all")
             f.write("\n")
