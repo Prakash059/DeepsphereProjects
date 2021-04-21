@@ -8,8 +8,6 @@ import tensorflow as tf
 from transformers import TFGPT2LMHeadModel, GPT2Tokenizer
 import nltk
 nltk.download('punkt')
-from nltk import tokenize
-
 
 predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/elmo-constituency-parser-2018.03.14.tar.gz")
 
@@ -92,7 +90,7 @@ def get_np_vp(tree,sentence):
     longest_phrase_to_use = max(last_nounphrase_flattened, last_verbphrase_flattened)
     longest_phrase_to_use = re.sub(r"-LRB- ", "(", longest_phrase_to_use)
     longest_phrase_to_use = re.sub(r" -RRB-", ")", longest_phrase_to_use)
-    sentence = sentence.rstrip('?:!.,;')
+    sentence = sentence[0].rstrip('?:!.,;')
     split_sentence = get_termination_portion(sentence, longest_phrase_to_use)
     return split_sentence
 

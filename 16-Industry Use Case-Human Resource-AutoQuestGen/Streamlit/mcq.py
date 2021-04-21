@@ -20,6 +20,10 @@ import random
 from transformers import T5ForConditionalGeneration,T5Tokenizer
 import streamlit as st
 
+# If we want to perform MCQ - we need below files/libraries
+# !pip install --quiet sense2vec==1.0.2
+# !wget https://github.com/explosion/sense2vec/releases/download/v1.0.0/s2v_reddit_2015_md.tar.gz
+# !tar -xvf  s2v_reddit_2015_md.tar.gz
 
 @st.cache(show_spinner=False)
 def tokenize_sentences(text):
@@ -73,7 +77,7 @@ def get_sentences_for_keyword(keywords, sentences):
         values = sorted(values, key=len, reverse=False)
         keyword_sentences[key] = values
     return keyword_sentences
-
+# @st.cache(allow_output_mutation=True)
 def sense2vec_get_words(word):
     s2v = Sense2Vec().from_disk('s2v_old')
     output = []
@@ -90,7 +94,8 @@ def sense2vec_get_words(word):
     out = list(OrderedDict.fromkeys(output))
     return out
 
-@st.cache(show_spinner=False)
+# @st.cache(show_spinner=False)
+# @st.cache(allow_output_mutation=True)
 def kw_distractors(keyword_list):
     distr = {}
     for kw in keyword_list:
@@ -130,7 +135,8 @@ def get_question(sentence,answer):
     Question= Question.strip()
     return Question
 
-@st.cache(show_spinner=False)
+# @st.cache(show_spinner=False)
+# @st.cache(allow_output_mutation=True)
 def getMCQ(keyword_sentence_mapping,choices):
     ques = {}
     for k,v in keyword_sentence_mapping.items():
