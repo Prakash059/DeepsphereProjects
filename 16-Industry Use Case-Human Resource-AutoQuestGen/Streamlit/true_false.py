@@ -87,12 +87,22 @@ def get_np_vp(tree,sentence):
     last_nounphrase, last_verbphrase =  get_right_most_VP_or_NP(tree)
     last_nounphrase_flattened = get_flattened(last_nounphrase)
     last_verbphrase_flattened = get_flattened(last_verbphrase)
-    longest_phrase_to_use = max(last_nounphrase_flattened, last_verbphrase_flattened)
+    if last_nounphrase is not None and last_verbphrase is not None:
+        longest_phrase_to_use = max(last_nounphrase_flattened, last_verbphrase_flattened)      
+    elif last_nounphrase is not None:
+        longest_phrase_to_use = last_nounphrase_flattened      
+    elif last_verbphrase is not None:
+        longest_phrase_to_use = last_verbphrase_flattened        
+    else:
+        print('-----------------Noun phrase & Verb Phrase both are None--------------------')
+        print('noun phrase - ',last_nounphrase)
+        print('verb phrase- ',last_verbphrase)
     longest_phrase_to_use = re.sub(r"-LRB- ", "(", longest_phrase_to_use)
     longest_phrase_to_use = re.sub(r" -RRB-", ")", longest_phrase_to_use)
-    sentence = sentence[0].rstrip('?:!.,;')
+    sentence = sentence.rstrip('?:!.,;')
     split_sentence = get_termination_portion(sentence, longest_phrase_to_use)
     return split_sentence
+
 
 
 

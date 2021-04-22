@@ -100,7 +100,7 @@ def download_link(object_to_download, download_filename, download_link_text,ques
     object_to_download1+="-"*100+"\r\n\r\n"
     if quest_type == "Match the Following":
         df = pd.DataFrame(object_to_download)
-        df.to_string(df,index = False, justify="justify-all")
+        df.to_string(download_filename,index = False, justify="justify-all")
         object_to_download1+=f"{df}\r\n"
     elif quest_type == "Input Text":
             object_to_download1+=f"{object_to_download}"
@@ -347,7 +347,7 @@ def true_false():
     if ts_col3.button('Tokenize sentences'):
         if text is not None:
             with st.spinner("Processing input to tokenize sentence and get 1st sentence to generate question"):
-                sentences = tokenize_sentences(text)
+                sentences = tokenize_sentences(text)[0]
                 st.write(sentences)
             st.success('Generated first sentence from given input')
         else:
@@ -358,9 +358,7 @@ def true_false():
     if wc_col3.button('Words Construction'):
         if text is not None:
             with st.spinner("Parsing input to construct words"):
-                sentences = tokenize_sentences(text)
-                print('type of sentence in main - ',type(sentences))
-                print('type of sentence in main - ',sentences)
+                sentences = tokenize_sentences(text)[0]
                 pos = pos_tree_from_sentence(text)
                 st.write(pos)
             st.success('Grammatical parsing completed')
@@ -372,7 +370,7 @@ def true_false():
     if sc_col3.button('Sentence Construction'):
         if text is not None:
             with st.spinner("Splitting sentence in-progress"):
-                sentences = tokenize_sentences(text)
+                sentences = tokenize_sentences(text)[0]
                 pos = pos_tree_from_sentence(text)
                 split_sentence = get_np_vp(pos,sentences)
                 print('split_sentence in app.py- ',split_sentence)
@@ -386,7 +384,7 @@ def true_false():
     if as_col3.button('Alternate Sentences'):
         if text is not None:
             with st.spinner("Generating Alternate sentences"):
-                sentences = tokenize_sentences(text)
+                sentences = tokenize_sentences(text)[0]
                 pos = pos_tree_from_sentence(text)
                 alt_sentence = alternate_sentences(pos,sentences)
                 st.write(alt_sentence)
@@ -399,7 +397,7 @@ def true_false():
     vm_col2.success("Step 5")
     if vm_col3.button('View Model Outcome'):
         if text is not None:
-            sentences = tokenize_sentences(text)
+            sentences = tokenize_sentences(text)[0]
             pos = pos_tree_from_sentence(text)
             alt_sentence = alternate_sentences(pos,sentences)
             st.markdown(download_link(alt_sentence, 'model_output.txt', 'Click here to download your output!',quest),unsafe_allow_html=True)
