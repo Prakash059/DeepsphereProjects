@@ -1,2 +1,1 @@
-The Purpose of this Implementation is to provide the users with adequate information regarding the Architectural
-components of Artificial Neural Networks in any Industry usecase Implmentation.
+Predict the Least Amount for the assets to be acquired for a certain period of time 
