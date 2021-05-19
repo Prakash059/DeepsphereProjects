@@ -25,16 +25,16 @@ def chatbot():
         closest = np.argmax(similarities, axis=1)
 
         # Print the correct answer
-        st.text_area("BOT: " + df.Answer.iloc[closest].values[0])
+        st.write("BOT: " + df.Answer.iloc[closest].values[0])
         
 def get_text():
-    input_text = st.text_input("You: ","So, what's in your mind")
+    input_text = st.text_input("")
     return input_text
 
 def main():
 
-    if st.button("lets talk"):
-        chatbot()
+    #if st.button("lets talk"):
+    chatbot()
 
 if __name__ == '__main__':
     main()
