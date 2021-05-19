@@ -20,7 +20,7 @@ import altair as alt
 from PIL import Image
 from pathlib import Path
 import time
-import io
+#import io
 import os
 from docx import Document
 from fake_useragent import UserAgent
@@ -33,16 +33,16 @@ def img_to_bytes(img_path):
     return encoded
 
 header_html = "<img src='data:image/png;base64,{}' class='img-fluid'>".format(
-    img_to_bytes("C:\\Users\\Darcey\\Downloads\\DeepSphere Logo.jpg")
+    img_to_bytes("DSLogo.png")
 )
 st.markdown(
     header_html, unsafe_allow_html=True,
 )
-#image = Image.open('C:\\Users\\Darcey\\Downloads\\DeepSphere Logo.jpg')
+#image = Image.open('DSLogo.png')
 
 #st.image(image)
 
-#LOGO_IMAGE = "C:\\Users\\Darcey\\Downloads\\DeepSphere Logo.jpg"
+#LOGO_IMAGE = "DSLogo.png"
 #
 #st.markdown(
 #    """
