@@ -17,9 +17,15 @@ from requests_html import HTML
 from requests_html import HTMLSession
 import trafilatura
 import altair as alt
-# from PIL import Image
+from PIL import Image
 from pathlib import Path
 import time
+import io
+import os
+from docx import Document
+from fake_useragent import UserAgent
+from bs4 import BeautifulSoup
+import re
 
 def img_to_bytes(img_path):
     img_bytes = Path(img_path).read_bytes()
@@ -27,7 +33,7 @@ def img_to_bytes(img_path):
     return encoded
 
 header_html = "<img src='data:image/png;base64,{}' class='img-fluid'>".format(
-    img_to_bytes("DSLogo.png")
+    img_to_bytes("C:\\Users\\Darcey\\Downloads\\DeepSphere Logo.jpg")
 )
 st.markdown(
     header_html, unsafe_allow_html=True,
@@ -35,6 +41,38 @@ st.markdown(
 #image = Image.open('C:\\Users\\Darcey\\Downloads\\DeepSphere Logo.jpg')
 
 #st.image(image)
+
+#LOGO_IMAGE = "C:\\Users\\Darcey\\Downloads\\DeepSphere Logo.jpg"
+#
+#st.markdown(
+#    """
+#    <style>
+#    .container {
+#        display: flex;
+#    }
+#    .logo-text {
+#        font-weight:70 !important;
+#        font-size:10px !important;
+#        color: #f9a01b !important;
+#        padding-top: 75px !important;
+#    }
+#    .logo-img {
+#        float:right;
+#    }
+#    </style>
+#    """,
+#    unsafe_allow_html=True
+#)
+#
+#st.markdown(
+#    f"""
+#    <div class="container">
+#        <img class="logo-img" src="data:image/png;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}">
+#        <p class="logo-text">Logo Much ?</p>
+#    </div>
+#    """,
+#    unsafe_allow_html=True
+#)
 
 
 st.title("Content Creation for the Given Topic using **_Web Scraping_** and **_NLP_**")
@@ -60,8 +98,10 @@ st.sidebar.markdown("This application is to extract URLs and text content for th
 
 def get_source(url):
     """Return the source code for the provided URL. 
+
     Args: 
         url (string): URL of the page to scrape.
+
     Returns:
         response (object): HTTP response object from requests_html. 
     """
@@ -97,16 +137,16 @@ def scrape_google(query):
 
 def text_downloader(raw_text):
 	b64 = base64.b64encode(raw_text.encode()).decode()
-	new_filename = "new_text_file_{}_.txt".format(timestr)
+	new_filename = "new_text_file_{}_.docx".format(timestr)
 	st.markdown("#### Download File ###")
-	href = f'<a href="data:file/txt;base64,{b64}" download="{new_filename}">Click Here!!</a>'
+	href = f'<a href="data:file/docx;base64,{b64}" download="{new_filename}">Click Here!!</a>'
 	st.markdown(href,unsafe_allow_html=True)
     
 class FileDownloader(object):
 	"""docstring for FileDownloader
 	>>> download = FileDownloader(data,filename,file_ext).download()
 	"""
-	def __init__(self, data,filename='myfile',file_ext='txt'):
+	def __init__(self, data,filename='myfile',file_ext='docx'):
 		super(FileDownloader, self).__init__()
 		self.data = data
 		self.filename = filename
@@ -131,7 +171,10 @@ def download_link(object_to_download, download_filename, download_link_text):
     """
 #     if isinstance(object_to_download,pd.DataFrame):
 #         object_to_download = object_to_download.to_csv(index=False)
-    object_to_download = str(object_to_download)
+    doc = Document()
+#    with open("C:\\Users\\Darcey\\Downloads\\model_output.txt", 'r', encoding='utf-8') as file:
+    doc.add_paragraph(object_to_download)
+    doc_to_save = doc.save(str(Topic)+".docx")
 #    object_to_download1 = ""
 #    if quest_type == "Input Text":
 #        object_to_download1 = "="*100+"\r\n"
@@ -165,56 +208,153 @@ def download_link(object_to_download, download_filename, download_link_text):
 #        for i,que in enumerate(object_to_download):
 #            object_to_download1+=f"{str(i+1)}. {que}\r\n"
 #    object_to_download1+=f"\r\n"
-    b64 = base64.b64encode(object_to_download.encode()).decode()
+#    b64 = base64.b64encode(object_to_download)#.encode()).decode()
     
-    return f'<a href="data:file/txt;base64,{b64}" download="{download_filename}">{download_link_text}</a>'
+#    return f'<a href="data:file/docx;base64,{b64}" download="{download_filename}">{download_link_text}</a>'
+    return doc_to_save
 
 #Topic = st.text_input('Input the topic here:')
+
+def scrape_google_all(Topic):
+
+    Topic = urllib.parse.quote_plus(Topic) # Format into URL encoding
+    number_result = 11
+
+    ua = UserAgent()
+
+    google_url = "https://www.google.com/search?q=" + Topic + "&num=" + str(number_result)
+    response = requests.get(google_url, {"User-Agent": ua.random})
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    result_div = soup.find_all('div', attrs = {'class': 'ZINbbc'})
+
+    links = []
+    titles = []
+    descriptions = []
+    for r in result_div:
+        # Checks if each element is present, else, raise exception
+        try:
+            link = r.find('a', href = True)
+            title = r.find('div', attrs={'class':'vvjwJb'}).get_text()
+            description = r.find('div', attrs={'class':'s3v9rd'}).get_text()
+
+            # Check to make sure everything is present before appending
+            if link != '' and title != '' and description != '': 
+                links.append(link['href'])
+                titles.append(title)
+                descriptions.append(description)
+        # Next loop if one element is not present
+        except:
+            continue
+    return links
+
+def Extract_Ranked_urls(links):
+    to_remove = []
+    clean_links = []
+    for i, l in enumerate(links):
+        clean = re.search('\/url\?q\=(.*)\&sa',l)
+
+        # Anything that doesn't fit the above pattern will be removed
+        if clean is None:
+            to_remove.append(i)
+            continue
+        clean_links.append(clean.group(1))
+
+    # Remove the corresponding titles & descriptions
+#    for x in to_remove:
+#        del titles[x]
+#        del descriptions[x]
+    return clean_links
 
 def Extract_urls(Topic):
     df = pd.DataFrame(scrape_google(Topic), columns = ['link'])
     return df
 
-def Extract_Contents(df):
+def Extract_Contents(clean_links):
     list2 = []
-    for url in df['link']:
+    for url in clean_links:
         downloaded = trafilatura.fetch_url(url)
         trafilatura.extract(downloaded)
         # outputs main content and comments as plain text ...
         list1 = trafilatura.extract(downloaded, include_comments=False)
         # outputs main content without comments as XML ...
+        list2.append("\n")
+        list2.append("---------------------------------------------------------------------------------------------------------------------")
+        list2.append("\n")
+        list2.append("Below contents are extracted from this url:")
+        list2.append("\n")
+        list2.append(url)
+        list2.append("\n")
         list2.append(list1)
         list3 = ''.join(filter(None, list2))
     return list3
 
 def View_Extracted_Contents(list3):
     Extracted_Contents = list3
+#    data = [content.strip() for content in Extracted_Contents.splitlines() if content]
+#    data1 = ''.join([str(elem) for elem in data])
     return Extracted_Contents
 
+def para_correct(list3):
+    data = [content.strip() for content in list3.splitlines() if content]
+    data1 = ''.join([str(elem) for elem in data])
+    return data1
+
 def main():
-    Topic = st.text_input('Input the topic here:')
+    Topic = st.text_input('Input the topic here and press ENTER:')
     
 #if len(Topic)>0:
-    if st.sidebar.button("Extract URLs"):
+    if st.sidebar.button("Extract URLs for the given topic"):
         with st.spinner("Extracting..."):
-            df = Extract_urls(Topic)
+            links = scrape_google_all(Topic)
+            clean_links = Extract_Ranked_urls(links)
             st.write("Below are the top URLs to extract content:")
-            for x in df['link']:
+            for x in clean_links:
                 st.write(x)
     st.sidebar.markdown("*******************************")
-    if st.sidebar.button("Extract Contents from URLs and Get Download Link"):
+    if st.sidebar.button("Download Contents from URLs"):
 #    if text is not None:
-        with st.spinner("Extracting..."):
-            df = Extract_urls(Topic)
-            list3 = Extract_Contents(df)
-        st.markdown(download_link(list3, 'model_output.txt', 'Click here to download the extracted text'),unsafe_allow_html=True)
+        with st.spinner("Downloading..."):
+            links = scrape_google_all(Topic)
+            clean_links = Extract_Ranked_urls(links)
+            list3 = Extract_Contents(clean_links)
+#            data1 = para_correct(list3)
+            data = [content.strip() for content in list3.splitlines() if content]
+            data1 = '\\n\n'.join(f"{row}\n" for row in data)
+            doc = Document()
+            doc.add_paragraph(data1)
+#            docx = Document(io.BytesIO(requests.get(doc).content))
+#            b64 = base64.b64encode(docx)  # some strings <-> bytes conversions necessary here
+#            href = f'<a href="data:file/docx;base64,{b64}">Download docx file</a>'
+#            st.markdown(href, unsafe_allow_html=True)
+            doc.paragraph_format.space_after = Inches(1.0)
+            doc.save(str(Topic)+".docx")
+        st.markdown("Download Complete")
     st.sidebar.markdown("*******************************")
     if st.sidebar.checkbox("View the Extracted Contents"):
         with st.spinner("Downloading the Contents..."):
-            df = Extract_urls(Topic)
-            list3 = Extract_Contents(df)
+            links = scrape_google_all(Topic)
+            clean_links = Extract_Ranked_urls(links)
+            list3 = Extract_Contents(clean_links)
             Extracted_Contents = View_Extracted_Contents(list3)
-            st.write(Extracted_Contents)
+            data = [content.strip() for content in Extracted_Contents.splitlines() if content]
+            for x in data:
+                st.write(x)
+            list2 = []
+            for url in clean_links:
+                downloaded = trafilatura.fetch_url(url)
+                trafilatura.extract(downloaded)
+                # outputs main content and comments as plain text ...
+                list1 = trafilatura.extract(downloaded, include_comments=False)
+                st.write(url)
+                if list1 is None:
+                    st.write("Contents not available")
+                else:
+                    st.write("Contents available")
+                ua = UserAgent()
+                response = requests.get(url, {"User-Agent": ua.random})
+
+                st.write("Response Code: ", response.status_code)
 #        if not st.sidebar.checkbox("View the Extracted Contents"):
 #            with st.spinner("Fetching the link to download..."):
 #            df = Extract_urls(Topic)
