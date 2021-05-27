@@ -1,7 +1,7 @@
 {"intents": [
     {"tag": "greeting",
      "patterns": ["Hi", "Hey", "Is anyone there?", "Hello", "Hay"],
-     "responses": ["Hello", "Hi", "Hi there"]
+     "responses": ["Hello! welcome to DeepSphere. How can i help you?"]
     },
     {"tag": "goodbye",
      "patterns": ["Bye", "See you later", "Goodbye"],
@@ -11,16 +11,12 @@
      "patterns": ["Thanks", "Thank you", "That's helpful", "Thanks for the help"],
      "responses": ["Happy to help!", "Any time!", "My pleasure", "You're most welcome!"]
     },
-    {"tag": "about",
-     "patterns": ["Who are you?", "What are you?", "Who you are?" ],
-     "responses": ["I.m Joana, your bot assistant", "I'm Joana, an Artificial Intelligent bot"]
-    },
     {"tag": "ask",
-        "patterns": ["how you doing?","how are you"],
-        "responses": ["Thanks For Asking!How can I help you?"]
+        "patterns": ["how you doing?","how are you?"],
+        "responses": ["i am doing good, Thanks For Asking! How can I help you?"]
     },
     {"tag": "noanswer",
-        "patterns": [],
+        "patterns": [ ],
         "responses": ["Sorry, can't understand you", "Please give me more info", "Not sure I understand"]
     },
     {"tag": "name",
@@ -38,6 +34,46 @@
     {"tag": "complaint",
     "patterns": ["have a complaint", "I want to raise a complaint", "there is a complaint about a service"],
     "responses": ["Please provide us your complaint in order to assist you", "Please mention your complaint, we will reach you and sorry for any inconvenience caused"]
+    },
+    {"tag": "Textbook",
+        "patterns": ["Do I need to buy textbooks?","textbooks?"],
+        "responses": ["All the reading materials you are required to access are included with your course."]
+    },
+    {"tag": "askorder",
+        "patterns": ["Do I need to take the course in a certain order?","certain order"],
+        "responses": ["We highly recommend completing the courses in the order presented because the content in each course builds on information from earlier lessons."]
+    },
+    {"tag": "career",
+        "patterns": ["Why should i start my career in data science?"],
+        "responses": ["Data Science course provides hands-on exposure to key technologies including R, Python, Machine Learning, Tableau, Hadoop, and Spark via live interaction with practitioners, practical labs, and industry projects."]
+    },
+    {"tag": "demo",
+        "patterns": ["Can I see a demo course before enrollment?"],
+        "responses": ["you can go through the sample course and it would give you a clear insight into how are the courses available."]
+    },
+    {"tag": "benefits",
+        "patterns": ["What are the benefits to enroll in a course?"],
+        "responses": ["You will get access to comprehensive courses, quizzes and assignment. This will allow you to evaluate your learning and measure your progress."]
+    },
+    {"tag": "time",
+        "patterns": ["Do the chapters meet at a specific time?"],
+        "responses": ["No, you can complete the coursework at a time that is most convenient for you!"]
+    },
+    {"tag": "registration",
+        "patterns": ["How do I register for the online courses?"],
+        "responses": ["Each course description includes a registration link."]
+    },
+    {"tag": "access",
+        "patterns": ["I have registered for a course. How do I access it?"],
+        "responses": ["You will receive an email containing your login information one business day prior to join the course."]
+    },
+    {"tag": "levels",
+        "patterns": ["what level are offered?"],
+        "responses": ["Our courses are divided into: Professional level, Executive level and student level. Each of these levels is subdivided into different standards."]
+    },
+    {"tag": "pay",
+        "patterns": ["How can I pay for my course?"],
+        "responses": ["You can pay by credit card, by bank transfer, or even by cheque. More details on the accepted methods of payment and deadlines can be found on our course payment page."]
     }
 ]
 }
