@@ -74,6 +74,14 @@
     {"tag": "pay",
         "patterns": ["How can I pay for my course?"],
         "responses": ["You can pay by credit card, by bank transfer, or even by cheque. More details on the accepted methods of payment and deadlines can be found on our course payment page."]
+    },
+    {"tag": "courses",
+        "patterns": ["What courses are you offering?"],
+        "responses": ["We offer several Applied Artificial Intelligence courses. Under the academic program, we offerelective and main courses for schools, colleges, and universities. Also, we provide a training program forprofessionals and executives for career transition and skill advancements."]
+    },
+    {"tag": "prerequisites",
+        "patterns": ["What are the prerequisites to take your courses?"],
+        "responses": ["There are no prerequisites to take our training program. Our program is designed in such a way that itenables participants from the foundational level to intermediate level to advanced level. We haveprograms for various types of learners, from schools to professionals to executives."]
     }
 ]
 }
