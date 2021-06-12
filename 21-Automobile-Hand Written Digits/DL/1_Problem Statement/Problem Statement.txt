@@ -1,1 +1,0 @@
-Identify digits from a dataset of handwritten images using Deep Learning
