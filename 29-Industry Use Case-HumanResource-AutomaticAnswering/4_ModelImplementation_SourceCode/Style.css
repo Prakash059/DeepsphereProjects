@@ -1,0 +1,88 @@
+.css-qbe2hs {
+    display: inline-flex;
+    align-items: center;
+    -moz-box-align: center;
+    -moz-box-pack: center;
+    justify-content: center;
+    font-weight: 400;
+    padding: 0.75rem 1rem;
+    border-radius: 0.25rem;
+    margin: 0px;
+    line-height: 1.6;
+    color: inherit;
+    width: auto;
+    background-color: green;
+    border: 1px solid rgba(38, 39, 48, 0.2);
+        border-top-color: rgba(38, 39, 48, 0.2);
+        border-right-color: rgba(38, 39, 48, 0.2);
+        border-bottom-color: rgba(38, 39, 48, 0.2);
+        border-left-color: rgba(38, 39, 48, 0.2);
+}
+.st-bw{
+background-color: darkgray;
+}
+img {
+  position: absolute;
+  left: -300px;
+  top: -50px;
+  width: 175px;
+  height: 125px;
+  padding-top: 10px;
+}
+
+.css-qbe2hs:hover {
+
+    border-color: black;
+    color: blue;
+
+}
+.css-h9oeas {
+
+    color: white;
+
+}
+h1 {
+
+    font-size: 1.75rem;
+
+}
+
+.css-j2eyvp {
+    border: 1px solid rgba(38, 39, 48, 0.96);
+    border-radius: 0.25rem;
+    padding: calc(1em - 1px);
+    width: 698px;
+    margin: 0px 0px 1rem;
+}
+h1 {
+    font-family: IBM Plex Sans, sans-serif;
+    font-weight: 700;
+    color: rgb(38, 39, 48);
+    line-height: 3;
+}
+
+.css-8xv65a {
+
+    display: block;
+    color: rgba(38, 39, 48, 0.99);
+    flex: 0 1 0%;
+    font-size: 0.8rem;
+    max-width: 730px;
+    padding: 0.5rem 1rem;
+    width: 100%;
+
+}
+#root > div:nth-child(1) > div > div > div > div > section.main.css-1v3fvcr.eknhn3m1 > div > div:nth-child(1) > div.css-j2eyvp.epcbefy1 > div:nth-child(1) > div:nth-child(1) > div > label{
+    font-size: 2rem;
+    color: rgb(38, 39, 48);
+    margin-bottom: 0.4rem;
+    margin-left: 11.5rem;
+    height: 1.5rem;
+    vertical-align: middle;
+    display: flex;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+
