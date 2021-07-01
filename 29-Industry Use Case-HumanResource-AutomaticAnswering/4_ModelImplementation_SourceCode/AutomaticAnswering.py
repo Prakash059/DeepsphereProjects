@@ -7,11 +7,10 @@ Original file is located at
     https://colab.research.google.com/drive/1B5j8e-WyudC-VS3iN8zSBM2_3B5c9_wK
 """
 
-
 import streamlit as st
 import numpy as np
 import pandas as pd
-df = pd.read_excel(r'C:\Users\MADDIKUNTA\Downloads\train.xlsx')
+df = pd.read_excel(r'C:\Users\Sai\Documents\Deepsphere AI\train.xlsx')
 
 
 import re
@@ -77,6 +76,8 @@ import gensim.models.keyedvectors as word2vec
 import pprint
 import numpy
 from PIL import Image
+from gensim.models import Word2Vec
+import gensim.downloader as api
 
 def getWordVec(word,model):
         samp=model['computer'];
@@ -135,7 +136,7 @@ if __name__=='__main__':
         text_input = st.text_input(label='How May I Help You?')
         submit_button = st.form_submit_button(label='Submit')
     st.markdown(footer,unsafe_allow_html=True)
-    href = f'<a style="color:black;" href="http://localhost:8501/" class="button">Refresh</a>'
+    href = f'<a style="text-align: center; color: white;" href="http://localhost:8501/" class="button">Refresh</a>'
     st.sidebar.markdown(href, unsafe_allow_html=True)
     if len(text_input) > 0:
         sentences=cleaned_sentences_with_stopwords
@@ -143,28 +144,26 @@ if __name__=='__main__':
         #split it by white space
         sentence_words = [[word for word in document.split() ]
                           for document in sentences]
-
-        
-
         dictionary = corpora.Dictionary(sentence_words)
                  
-        
         bow_corpus = [dictionary.doc2bow(text) for text in sentence_words]
-
-                    
+              
         question_orig=text_input
         question=clean_sentence(question_orig,stopwords=False);
         question_embedding = dictionary.doc2bow(question.split())
 
-        v2w_model = gensim.models.KeyedVectors.load_word2vec_format('C:/Users/MADDIKUNTA/Downloads/GoogleNews-vectors-negative300.bin.gz', binary=True, limit = 100000)
-        #b=getPhraseEmbedding(phrase,embeddingmodel)
+        
+        glove_model=None;
+        glove_model = api.load(r'C:\Users\Sai\Downloads\glovemodel.mod')
+        
+        
         sent_embeddings=[];
         for sent in cleaned_sentences:
-            sent_embeddings.append(getPhraseEmbedding(sent,v2w_model));
+            sent_embeddings.append(getPhraseEmbedding(sent,glove_model));
 
-            question_embedding=getPhraseEmbedding(question,v2w_model);
-
-        b = retriveAndPrintFAQAnswer(question_embedding,sent_embeddings,df, cleaned_sentences);
+        question_embedding=getPhraseEmbedding(question,glove_model);
+        b = retriveAndPrintFAQAnswer(question_embedding,sent_embeddings,df, cleaned_sentences_with_stopwords);
         st.write("Retrived: ",df.iloc[b,1])
         st.write(df.iloc[b,2])
+    
     
