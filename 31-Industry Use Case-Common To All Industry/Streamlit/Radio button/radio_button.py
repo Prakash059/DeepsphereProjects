@@ -6,24 +6,24 @@
 #Date and Time :  24/06/2021 18:30 hrs
 
 
-import streamlit as st
+import streamlit as vAR_st
 from PIL import Image
 import urllib.request
 
 
 #for Setting the page layout to wide
-st.set_page_config(layout="wide")
+vAR_st.set_page_config(layout="wide")
 
 #for having the logo and title in the same line we use vAR.st_beta_columns() and make the ratio accordingly 
-vAR_logo, vAR_title = st.beta_columns((6,50))
+vAR_logo, vAR_title = vAR_st.beta_columns((6,50))
 with vAR_logo:
 #Urllib module is the URL handling module for python, It uses the urlopen function and is able to fetch URLs 
   urllib.request.urlretrieve('https://raw.githubusercontent.com/DeepsphereAI/IndustryUseCases/main/31-Industry%20Use%20Case-Common%20To%20All%20Industry/Streamlit/Logo/logo.jpg',"logo.jpg")
   logo = Image.open("logo.jpg")
-  st.image(logo)
+  vAR_st.image(logo)
 with vAR_title:
 #setting font size and colour for the title 
-  st.markdown("""
+  vAR_st.markdown("""
 <style>
 .big-font {
     font-size:30px !important;
@@ -31,30 +31,30 @@ with vAR_title:
 </style>
 """, unsafe_allow_html=True)
 
-  st.markdown('<p class="big-font">Master Streamlit With DeepSphere.AI Personalized Learning Platform', unsafe_allow_html=True)
+  vAR_st.markdown('<p class="big-font">Master Streamlit With DeepSphere.AI Personalized Learning Platform', unsafe_allow_html=True)
 
 #by this text-align: centre, we can align the title to the centre of the page
-st.markdown("<h1 style='text-align: center; color: green;'>A Simple Radio Button</h1>", unsafe_allow_html=True)
+vAR_st.markdown("<h1 style='text-align: center; color: green;'>A Simple Radio Button</h1>", unsafe_allow_html=True)
 
 
-col1, col2, col3 = st.beta_columns((1,1,1))
+col1, col2, col3 = vAR_st.beta_columns((1,1,1))
 with col2:
 #with vAR_st.radio() we can make a radio button for user input
-  vAR_input = st.radio('Favorite game',('Badminton','Football','Cricket'))
+  vAR_input = vAR_st.radio('Favorite game',('Badminton','Football','Cricket'))
 
 #For the submit display button
-col1, col2, col3= st.beta_columns((5,1,5))
+col1, col2, col3= vAR_st.beta_columns((5,1,5))
 
 with col2:
 #for the submit button use vAR_st.button()
-  vAR_submit = st.button('Submit')  
+  vAR_submit = vAR_st.button('Submit')  
 
 #to display the user input, if we hit the submit button your selected option will appear 
 if vAR_submit:
-  col1, col2, col3 = st.beta_columns((1,1,1))
+  col1, col2, col3 = vAR_st.beta_columns((1,1,1))
   with col2:
-    st.subheader('Favorite game')
-    st.info(vAR_input)
+    vAR_st.subheader('Favorite game')
+    vAR_st.info(vAR_input)
 
 
 
