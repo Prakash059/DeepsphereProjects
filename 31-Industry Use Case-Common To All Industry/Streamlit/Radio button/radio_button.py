@@ -1,6 +1,6 @@
 %%writefile radio_button.py
 
-#File name     :  Streamlit_radio_button
+#File name     :  radio_button.py
 #Purpose       :  A simple radio button for streamlit using python
 #Author        :  Deepsphere.AI, INC.
 #Date and Time :  24/06/2021 18:30 hrs
