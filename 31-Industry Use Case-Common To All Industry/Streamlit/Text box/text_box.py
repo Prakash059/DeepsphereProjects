@@ -36,7 +36,13 @@ with vAR_title:
 #by this text-align: centre, we can align the title to the centre of the page
 vAR_st.markdown("<h1 style='text-align: center; color: green;'>A Simple Text Box</h1>", unsafe_allow_html=True)
 
-
+#To customize the background colour of the submit button  
+m = vAR_st.markdown("""
+<style>
+div.stButton > button:first-child {
+    background-color: rgb(50,205,50);
+}
+</style>""", unsafe_allow_html=True)
 
 col1, col2, col3 = vAR_st.beta_columns((1,1,1))
 with col2:
