@@ -31,7 +31,7 @@ with vAR_title:
 
   vAR_st.markdown('<p class="big-font">Master Streamlit With DeepSphere.AI Personalized Learning Platform', unsafe_allow_html=True)
 
-#by this text-align: centre we can align the title to the centre of the page
+#by this text-align: centre, we can align the title to the centre of the page
 vAR_st.markdown("<h1 style='text-align: center; color: green;'>A Simple Check Box</h1>", unsafe_allow_html=True)
 
 
