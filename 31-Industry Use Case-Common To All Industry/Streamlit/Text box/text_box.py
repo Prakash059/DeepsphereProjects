@@ -7,9 +7,6 @@
 #Date and Time :  24/06/2021 18:30 hrs
 
 import streamlit as vAR_st
-from PIL import Image
-import urllib.request
-
 
 #for Setting the page layout to wide
 vAR_st.set_page_config(layout="wide")
@@ -17,10 +14,7 @@ vAR_st.set_page_config(layout="wide")
 #for having the logo and title in the same line we use vAR.st_beta_columns() and make the ratio accordingly 
 vAR_logo, vAR_title = vAR_st.beta_columns((6,50))
 with vAR_logo:
-#Urllib module is the URL handling module for python, It uses the urlopen function and is able to fetch URLs 
-  urllib.request.urlretrieve('https://raw.githubusercontent.com/DeepsphereAI/IndustryUseCases/main/31-Industry%20Use%20Case-Common%20To%20All%20Industry/Streamlit/Logo/logo.jpg',"logo.jpg")
-  logo = Image.open("logo.jpg")
-  vAR_st.image(logo)
+  vAR_st.image('https://raw.githubusercontent.com/DeepsphereAI/IndustryUseCases/main/31-Industry%20Use%20Case-Common%20To%20All%20Industry/Streamlit/Logo/logo.jpg')
 with vAR_title:
 #setting font size and colour for the title 
   vAR_st.markdown("""
