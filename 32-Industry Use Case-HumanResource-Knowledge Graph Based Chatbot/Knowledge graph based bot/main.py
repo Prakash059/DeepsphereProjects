@@ -7,7 +7,7 @@ import random
 g = Graph()
 g.parse("knowledge_base.nt", format="nt")
 
-class eliza:
+class bot:
   def __init__(self):
     self.keys = list(map(lambda x:re.compile(x[0], re.IGNORECASE),responses))
     self.values = list(map(lambda x:x[1],responses))
@@ -146,13 +146,13 @@ responses = [
     "Please ask questions about courses, students and topics."]]
 ]
 
-def command_interface():
+def main():
   print('-' * 100)
   print('Welcome to Chatbot! Please enter your questions and enter "quit" when you are done.')
   print('-'*100)
 
   s = ''
-  chatbot = eliza();
+  chatbot = bot();
   while s != 'quit':
     try:
       s = input('> ')
@@ -164,4 +164,4 @@ def command_interface():
 
 
 if __name__ == "__main__":
-  command_interface()
+  main()
