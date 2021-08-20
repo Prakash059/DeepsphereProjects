@@ -1,9 +1,8 @@
-
 # Video Parameters
-GLOBAL_ROW = 256
+GLOBAL_ROW = 720
 # Scale according to the size of the row
-GLOBAL_COL = 256
-GLOBAL_FPS = 20
+GLOBAL_COL = 720
+GLOBAL_FPS = 30
 
 # Spark Configuration
 GLOBAL_BATCH_DURATION = 2
@@ -12,10 +11,6 @@ GLOBAL_SLIDE_DURATION = 10
 GLOBAL_BROKER = "localhost:9092"
 
 # Live Video Address
-# GLOBAL_STREAM_ADDRESS = 'rtmp://aistranger.net:1935/hls'
-GLOBAL_STREAM_ADDRESS = 'rtmp://media3.scctv.net/live/scctv_800'
+#GLOBAL_STREAM_ADDRESS = 'https://www.youtube.com/watch?v=9uT9rJh9tZw'
 
-# Third part API
-URL = "https://api-us.faceplusplus.com/facepp/v3/detect"
-API_KEY = "vjNZBuJIPB6u5jn9SXRSsMczEuVe_oct"
-API_SECRET = "6xEDy9wURWJq78AB5LLOR4Rj54jgGZ4O"
+GLOBAL_STREAM_ADDRESS = input("Enter the youtube url:")
